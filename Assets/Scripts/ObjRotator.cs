@@ -43,7 +43,7 @@ public class ObjRotator : MonoBehaviour
         transform.eulerAngles = _lerpRotation;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (!MainGui.Instance) return;
         _mousePos = Input.mousePosition;
