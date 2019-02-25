@@ -20,8 +20,10 @@ public class ObjRotator : MonoBehaviour
     public bool HoldKey;
     public bool InvertX;
     public bool InvertY;
-    public KeyCode KeyToHold = KeyCode.L;
+    public bool AllowHideUI;
 
+    public KeyCode KeyToHold = KeyCode.L;
+    
     public int MouseButton;
 
     // Use this for initialization
@@ -74,8 +76,7 @@ public class ObjRotator : MonoBehaviour
             }
 
             _rotation.x = Mathf.Clamp(_rotation.x, -80, 80);
-
-            MainGui.Instance.SaveHideStateAndHideAndLock(this);
+            if(AllowHideUI) MainGui.Instance.SaveHideStateAndHideAndLock(this);
         }
         else
         {
