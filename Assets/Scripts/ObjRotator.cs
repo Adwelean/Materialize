@@ -1,6 +1,7 @@
 ﻿#region
 
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 #endregion
 
@@ -43,49 +44,54 @@ public class ObjRotator : MonoBehaviour
 
     private void Update()
     {
+
         if (!MainGui.Instance) return;
-        _mousePos = Input.mousePosition;
-
-        var mouseOffset = _mousePos - _lastMousePos;
-
-        if (Input.GetMouseButton(MouseButton))
-            _mouseDownCount++;
-        else
-            _mouseDownCount = 0;
-
-        // skip the first frame because we could just be regaining focus
-
-        if ((HoldKey && Input.GetKey(KeyToHold) || HoldKey == false) && _mouseDownCount > 1)
+        if (!EventSystem.current.IsPointerOverGameObject())
         {
-            if (AllowX)
+            _mousePos = Input.mousePosition;
+
+            var mouseOffset = _mousePos - _lastMousePos;
+
+            if (Input.GetMouseButton(MouseButton))
+                _mouseDownCount++;
+            else
+                _mouseDownCount = 0;
+
+            // skip the first frame because we could just be regaining focus
+
+            if ((HoldKey && Input.GetKey(KeyToHold) || HoldKey == false) && _mouseDownCount > 1)
             {
-                if (InvertX)
-                    _rotation -= new Vector3(0, 1, 0) * mouseOffset.x * 0.3f;
-                else
-                    _rotation += new Vector3(0, 1, 0) * mouseOffset.x * 0.3f;
+
+                if (AllowX)
+                {
+                    if (InvertX)
+                        _rotation -= new Vector3(0, 1, 0) * mouseOffset.x * 0.3f;
+                    else
+                        _rotation += new Vector3(0, 1, 0) * mouseOffset.x * 0.3f;
+                }
+
+                if (AllowY)
+                {
+                    if (InvertY)
+                        _rotation -= new Vector3(1, 0, 0) * mouseOffset.y * 0.3f;
+                    else
+                        _rotation += new Vector3(1, 0, 0) * mouseOffset.y * 0.3f;
+                }
+
+                _rotation.x = Mathf.Clamp(_rotation.x, -80, 80);
+
+                MainGui.Instance.SaveHideStateAndHideAndLock(this);
+            }
+            else
+            {
+                MainGui.Instance.HideGuiLocker.Unlock(this);
             }
 
-            if (AllowY)
-            {
-                if (InvertY)
-                    _rotation -= new Vector3(1, 0, 0) * mouseOffset.y * 0.3f;
-                else
-                    _rotation += new Vector3(1, 0, 0) * mouseOffset.y * 0.3f;
-            }
 
-            _rotation.x = Mathf.Clamp(_rotation.x, -80, 80);
+            _lerpRotation = _lerpRotation * 0.95f + _rotation * 0.05f;
+            transform.eulerAngles = _lerpRotation;
 
-            MainGui.Instance.SaveHideStateAndHideAndLock(this);
+            _lastMousePos = _mousePos;
         }
-        else
-        {
-            MainGui.Instance.HideGuiLocker.Unlock(this);
-        }
-
-
-        _lerpRotation = _lerpRotation * 0.95f + _rotation * 0.05f;
-        transform.eulerAngles = _lerpRotation;
-
-        _lastMousePos = _mousePos;
     }
 }
