@@ -89,8 +89,7 @@ public class ObjRotator : MonoBehaviour
                 MainGui.Instance.HideGuiLocker.Unlock(this);
             }
 
-<<<<<<< HEAD
-=======
+
             _rotation.x = Mathf.Clamp(_rotation.x, -80, 80);
             if(AllowHideUI) MainGui.Instance.SaveHideStateAndHideAndLock(this);
         }
@@ -98,7 +97,7 @@ public class ObjRotator : MonoBehaviour
         {
             MainGui.Instance.HideGuiLocker.Unlock(this);
         }
->>>>>>> master
+
 
             _lerpRotation = _lerpRotation * 0.95f + _rotation * 0.05f;
             transform.eulerAngles = _lerpRotation;
@@ -106,4 +105,3 @@ public class ObjRotator : MonoBehaviour
             _lastMousePos = _mousePos;
         }
     }
-}
