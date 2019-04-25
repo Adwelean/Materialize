@@ -69,7 +69,7 @@ public class SaveLoadProject : MonoBehaviour
     // Use this for initialization
     private void Start()
     {
-        MainGUI = FindObjectOfType<MainGui>();
+        //MainGUI = FindObjectOfType<MainGui>();
         if (Application.platform == RuntimePlatform.WindowsEditor ||
             Application.platform == RuntimePlatform.WindowsPlayer)
             _pathChar = '\\';
@@ -258,7 +258,7 @@ public class SaveLoadProject : MonoBehaviour
     private IEnumerator SaveTexture(Texture2D textureToSave, string pathToFile)
     {
         if (!textureToSave || pathToFile.IsNullOrEmpty()) yield break;
-        if (MainGUI.ScaleTexture)
+        if (MainGui.Instance.ScaleTexture)
         {
             //TextureScale.BilinearScale(_textureToSave);
             textureToSave = TextureScale.Bilinear(textureToSave, int.Parse(MainGUI.XSize), int.Parse(MainGUI.YSize));

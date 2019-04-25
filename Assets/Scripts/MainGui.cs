@@ -132,7 +132,8 @@ public class MainGui : MonoBehaviour
     public string QuicksavePathProperty = "";
     public string QuicksavePathSmoothness = "";
 
-    //public Material skyboxMaterial;
+
+    public Material skyboxMaterial;
     public ReflectionProbe ReflectionProbe;
     [HideInInspector] public Material SampleMaterial;
     public Material SampleMaterialRef;
@@ -1241,7 +1242,7 @@ public class MainGui : MonoBehaviour
             _selectedCubemap += 1;
             if (_selectedCubemap >= CubeMaps.Length) _selectedCubemap = 0;
 
-            //skyboxMaterial.SetTexture ("_Tex", CubeMaps[selectedCubemap] );
+            skyboxMaterial.SetTexture ("_Tex", CubeMaps[_selectedCubemap] );
             Shader.SetGlobalTexture(GlobalCubemapId, CubeMaps[_selectedCubemap]);
             ReflectionProbe.RenderProbe();
         }
