@@ -62,7 +62,7 @@ public class SaveLoadProject : MonoBehaviour
 {
     private char _pathChar;
     private ProjectObject _thisProject;
-    private MainGui MainGUI;
+
 
     [HideInInspector] public bool Busy;
 
@@ -261,7 +261,7 @@ public class SaveLoadProject : MonoBehaviour
         if (MainGui.Instance.ScaleTexture)
         {
             //TextureScale.BilinearScale(_textureToSave);
-            textureToSave = TextureScale.Bilinear(textureToSave, int.Parse(MainGUI.XSize), int.Parse(MainGUI.YSize));
+            textureToSave = TextureScale.Bilinear(textureToSave, int.Parse(MainGui.Instance.XSize), int.Parse(MainGui.Instance.YSize));
         }
 
         Debug.Log($"Salvando {textureToSave} como {pathToFile}");
