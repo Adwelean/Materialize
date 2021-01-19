@@ -7,6 +7,10 @@ using SFB;
 using UnityEngine;
 using UnityEngine.UI;
 
+using Cysharp.Threading.Tasks;
+using System.Collections;
+using System.IO;
+
 
 #endregion
 
@@ -174,11 +178,27 @@ public class MainGui : MonoBehaviour
     private bool ScaleTextureLocked;
     public Toggle[] FileFormatToggles;
 
+    public Text DebugLog;
+    string cmdInfos = "no args";
+
     #endregion
 
     private void Awake()
     {
         Instance = this;
+    }
+
+    private static string GetArg(string name)
+    {
+        var args = System.Environment.GetCommandLineArgs();
+        for (int i = 0; i < args.Length; i++)
+        {
+            if (args[i] == name && args.Length > i + 1)
+            {
+                return args[i + 1];
+            }
+        }
+        return null;
     }
 
     private void Start()
@@ -232,6 +252,78 @@ public class MainGui : MonoBehaviour
         ReflectionProbe.RenderProbe();
 
         HideGuiLocker.LockEmpty += LoadHideState;
+
+        var path = GetArg("-batchPath");
+        cmdInfos = "P:"+path+"\n"+ string.Join("\n", System.Environment.GetCommandLineArgs());
+
+        //await StartBatchAsync();
+        StartCoroutine(LateStart(5));
+    }
+
+    IEnumerator LateStart(float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+        //Your Function You Want to Call
+        StartBatch();
+    }
+
+    public void StartBatch()
+    {
+        StartBatchAsync().Forget();
+    }
+
+    public async UniTask StartBatchAsync()
+    {
+        var outputProcessResultPath = GetArg("-outputProcessResultPath");
+        var filePathsToProcess = GetArg("-filePathsToProcessCommaSeparated");
+        var baseDirectory = GetArg("-basePath");
+        var baseDirectoryWithRecurse = GetArg("-basePathWithRecuse");
+
+        if (string.IsNullOrWhiteSpace(outputProcessResultPath))
+            Application.Quit();
+
+        var succesLogFilePath = Path.Combine(outputProcessResultPath, "success.log");
+        var errorLogFilePath = Path.Combine(outputProcessResultPath, "error.log");
+
+        if (new string[] { filePathsToProcess, baseDirectory, baseDirectoryWithRecurse }.Where(x => !string.IsNullOrWhiteSpace(x)).Count() > 1)
+        {
+            File.AppendAllText(errorLogFilePath, $"[{DateTimeOffset.Now:G}] Please use only one of the following options: -filePathsToProcessCommaSeparated, -basePath, -basePathWithRecuse");
+
+            Application.Quit(1);
+        }
+
+        try
+        {
+            if (!string.IsNullOrWhiteSpace(filePathsToProcess))
+            {
+                var filePaths = filePathsToProcess.Split(',');
+
+                if (filePaths.Length <= 0)
+                {
+                    File.AppendAllText(errorLogFilePath, $"[{DateTimeOffset.Now:G}] No files has been specified");
+
+                    Application.Quit(1);
+                }
+
+                await Batchui.StartBatch(outputProcessResultPath, filePaths);
+            }
+
+            File.AppendAllText(succesLogFilePath, $"[{DateTimeOffset.Now:G}] success");
+        }
+        catch (Exception ex)
+        {
+            File.AppendAllText(errorLogFilePath, $"[{DateTimeOffset.Now:G}] {ex.Message}");
+        }
+        finally
+        {
+            Application.Quit();
+        }
+    }
+
+    /*async UniTask*/ void OnGUI()
+    {
+        GUILayout.Label(cmdInfos);
+        //await StartBatchAsync();
     }
 
     private void LateUpdate()

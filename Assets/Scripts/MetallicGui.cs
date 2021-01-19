@@ -383,6 +383,7 @@ public class MetallicGui : MonoBehaviour
         _metallicBlitMaterial.SetTexture("_OverlayBlurTex", _overlayBlurMap);
 
         CleanupTexture(_tempMap);
+
         _tempMap = new RenderTexture(_imageSizeX, _imageSizeY, 0, RenderTextureFormat.ARGB32,
             RenderTextureReadWrite.Linear) {wrapMode = TextureWrapMode.Repeat};
 

@@ -19,8 +19,11 @@ public static class GuiHelper
     public static bool Slider(Rect rect, string title, float value, string textValue, out float outValue,
         out string outTextValue, float minValue, float maxValue)
     {
-        
-        if (textValue == null) textValue = value.ToString();
+
+        if (string.IsNullOrWhiteSpace(textValue))
+            textValue = value.ToString();
+        else
+            textValue = textValue.Replace(".", ",");
 
         var offsetX = (int) rect.x;
         var offsetY = (int) rect.y;

@@ -107,9 +107,6 @@ public class SaveLoadProject : MonoBehaviour
 
     public void SaveProject(string pathToFile)
     {
-        if (pathToFile.Contains("."))
-            pathToFile = pathToFile.Substring(0, pathToFile.LastIndexOf(".", StringComparison.Ordinal));
-
         List<string> extensions = new List<string>();
         Debug.Log("Saving Project: " + pathToFile);
 
@@ -285,7 +282,7 @@ public class SaveLoadProject : MonoBehaviour
 
     private IEnumerator SaveAllTextures(string pathToFile)
     {
-        var path = pathToFile.Substring(0, pathToFile.LastIndexOf(_pathChar) + 1);
+        //var path = pathToFile.Substring(0, pathToFile.LastIndexOf(_pathChar) + 1);
         //yield return StartCoroutine(SaveTexture(MainGui.Instance.HeightMap, path + _thisProject.HeightMapPath));
 
         //yield return StartCoroutine(SaveTexture(MainGui.Instance.DiffuseMap, path + _thisProject.DiffuseMapPath));
@@ -303,24 +300,23 @@ public class SaveLoadProject : MonoBehaviour
 
         //yield return StartCoroutine(SaveTexture(MainGui.Instance.AoMap, path + _thisProject.AoMapPath));
 
-        yield return SaveTexture(MainGui.Instance.HeightMap, path + _thisProject.HeightMapPath);
+        yield return SaveTexture(MainGui.Instance.HeightMap, Path.Combine(pathToFile, _thisProject.HeightMapPath));
 
-        yield return SaveTexture(MainGui.Instance.DiffuseMap, path + _thisProject.DiffuseMapPath);
+        yield return SaveTexture(MainGui.Instance.DiffuseMap, Path.Combine(pathToFile, _thisProject.DiffuseMapPath));
 
-        yield return SaveTexture(MainGui.Instance.DiffuseMapOriginal,
-            path + _thisProject.DiffuseMapOriginalPath);
+        yield return SaveTexture(MainGui.Instance.DiffuseMapOriginal, Path.Combine(pathToFile, _thisProject.DiffuseMapOriginalPath));
 
-        yield return SaveTexture(MainGui.Instance.NormalMap, path + _thisProject.NormalMapPath);
+        yield return SaveTexture(MainGui.Instance.NormalMap, Path.Combine(pathToFile, _thisProject.NormalMapPath));
 
-        yield return SaveTexture(MainGui.Instance.MetallicMap, path + _thisProject.MetallicMapPath);
+        yield return SaveTexture(MainGui.Instance.MetallicMap, Path.Combine(pathToFile, _thisProject.MetallicMapPath));
 
-        yield return SaveTexture(MainGui.Instance.SmoothnessMap, path + _thisProject.SmoothnessMapPath);
+        yield return SaveTexture(MainGui.Instance.SmoothnessMap, Path.Combine(pathToFile, _thisProject.SmoothnessMapPath));
 
-        yield return SaveTexture(MainGui.Instance.EdgeMap, path + _thisProject.EdgeMapPath);
+        yield return SaveTexture(MainGui.Instance.EdgeMap, Path.Combine(pathToFile, _thisProject.EdgeMapPath));
 
-        yield return SaveTexture(MainGui.Instance.AoMap, path + _thisProject.AoMapPath);
+        yield return SaveTexture(MainGui.Instance.AoMap, Path.Combine(pathToFile, _thisProject.AoMapPath));
 
-        MainGui.Instance.Modle.SetActive(true);
+        //MainGui.Instance.Modle.SetActive(true);
     }
 
     public async Task SaveTexture(string extension, Texture2D textureToSave, string pathToFile)
@@ -340,10 +336,11 @@ public class SaveLoadProject : MonoBehaviour
         Debug.Log($"Saved {textureToSave} To {pathToFile}");
         if (!pathToFile.Contains(".")) pathToFile = $"{pathToFile}.{MainGui.Instance.SelectedFormat}";
 
-        var fileIndex = pathToFile.LastIndexOf('.');
-        var extension = pathToFile.Substring(fileIndex + 1, pathToFile.Length - fileIndex - 1);
+        //var fileIndex = pathToFile.LastIndexOf('.');
+        //var extension = pathToFile.Substring(fileIndex + 1, pathToFile.Length - fileIndex - 1);
+        var fi = new FileInfo(pathToFile);
 
-        switch (extension)
+        switch (fi.Extension)
         {
             case "png":
                 {
@@ -370,7 +367,7 @@ public class SaveLoadProject : MonoBehaviour
                     break;
                 }
             default:
-                throw new ArgumentOutOfRangeException(nameof(extension), extension, null);
+                throw new ArgumentOutOfRangeException(nameof(fi.Extension), fi.Extension, null);
         }
 
         Resources.UnloadUnusedAssets();

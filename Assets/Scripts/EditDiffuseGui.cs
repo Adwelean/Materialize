@@ -447,7 +447,7 @@ public class EditDiffuseGui : MonoBehaviour
         _blitMaterial.SetVector(BlurDirection, new Vector4(0, 1, 0, 0));
         Graphics.Blit(_tempMap, _avgMap, _blitMaterial, 1);
 
-        _blitMaterial.SetFloat(BlurSpread, _eds.AvgColorBlurSize / 5.0f);
+        _blitMaterial.SetFloat(BlurSpread, _eds.AvgColorBlurSize / 5);
         _blitMaterial.SetVector(BlurDirection, new Vector4(1, 0, 0, 0));
         Graphics.Blit(_avgMap, _tempMap, _blitMaterial, 1);
         _blitMaterial.SetVector(BlurDirection, new Vector4(0, 1, 0, 0));

@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections;
+
 using UnityEngine;
 
 #endregion
@@ -155,7 +156,7 @@ public class HeightFromDiffuseGui : MonoBehaviour
     private void InitializeSettings()
     {
         if (_settingsInitialized) return;
-//        Debug.Log("Initializing Height From Diffuse Settings");
+        //        Debug.Log("Initializing Height From Diffuse Settings");
 
         _heightFromDiffuseSettings = new HeightFromDiffuseSettings();
 
@@ -817,24 +818,32 @@ public class HeightFromDiffuseGui : MonoBehaviour
         }
 
 
-//        Debug.Log("Initializing Textures of size: " + _imageSizeX + "x" + _imageSizeY);
+        //        Debug.Log("Initializing Textures of size: " + _imageSizeX + "x" + _imageSizeY);
 
         _tempBlurMap = new RenderTexture(_imageSizeX, _imageSizeY, 0, RenderTextureFormat.RFloat,
-            RenderTextureReadWrite.Linear) {wrapMode = TextureWrapMode.Repeat};
+            RenderTextureReadWrite.Linear)
+        { wrapMode = TextureWrapMode.Repeat };
         _blurMap0 = new RenderTexture(_imageSizeX, _imageSizeY, 0, RenderTextureFormat.RFloat,
-            RenderTextureReadWrite.Linear) {wrapMode = TextureWrapMode.Repeat};
+            RenderTextureReadWrite.Linear)
+        { wrapMode = TextureWrapMode.Repeat };
         _blurMap1 = new RenderTexture(_imageSizeX, _imageSizeY, 0, RenderTextureFormat.RFloat,
-            RenderTextureReadWrite.Linear) {wrapMode = TextureWrapMode.Repeat};
+            RenderTextureReadWrite.Linear)
+        { wrapMode = TextureWrapMode.Repeat };
         _blurMap2 = new RenderTexture(_imageSizeX, _imageSizeY, 0, RenderTextureFormat.RFloat,
-            RenderTextureReadWrite.Linear) {wrapMode = TextureWrapMode.Repeat};
+            RenderTextureReadWrite.Linear)
+        { wrapMode = TextureWrapMode.Repeat };
         _blurMap3 = new RenderTexture(_imageSizeX, _imageSizeY, 0, RenderTextureFormat.RFloat,
-            RenderTextureReadWrite.Linear) {wrapMode = TextureWrapMode.Repeat};
+            RenderTextureReadWrite.Linear)
+        { wrapMode = TextureWrapMode.Repeat };
         _blurMap4 = new RenderTexture(_imageSizeX, _imageSizeY, 0, RenderTextureFormat.RFloat,
-            RenderTextureReadWrite.Linear) {wrapMode = TextureWrapMode.Repeat};
+            RenderTextureReadWrite.Linear)
+        { wrapMode = TextureWrapMode.Repeat };
         _blurMap5 = new RenderTexture(_imageSizeX, _imageSizeY, 0, RenderTextureFormat.RFloat,
-            RenderTextureReadWrite.Linear) {wrapMode = TextureWrapMode.Repeat};
+            RenderTextureReadWrite.Linear)
+        { wrapMode = TextureWrapMode.Repeat };
         _blurMap6 = new RenderTexture(_imageSizeX, _imageSizeY, 0, RenderTextureFormat.RFloat,
-            RenderTextureReadWrite.Linear) {wrapMode = TextureWrapMode.Repeat};
+            RenderTextureReadWrite.Linear)
+        { wrapMode = TextureWrapMode.Repeat };
 
         _avgMap = new RenderTexture(256, 256, 0, RenderTextureFormat.RFloat, RenderTextureReadWrite.Linear)
         {
@@ -888,7 +897,8 @@ public class HeightFromDiffuseGui : MonoBehaviour
 
         CleanupTexture(_tempHeightMap);
         _tempHeightMap = new RenderTexture(_imageSizeX, _imageSizeY, 0, RenderTextureFormat.ARGB32,
-            RenderTextureReadWrite.Linear) {wrapMode = TextureWrapMode.Repeat};
+            RenderTextureReadWrite.Linear)
+        { wrapMode = TextureWrapMode.Repeat };
 
         _blitMaterial.SetFloat(FinalContrast, _heightFromDiffuseSettings.FinalContrast);
         _blitMaterial.SetFloat(FinalBias, _heightFromDiffuseSettings.FinalBias);
@@ -959,7 +969,8 @@ public class HeightFromDiffuseGui : MonoBehaviour
         }
 
         MainGuiScript.HdHeightMap = new RenderTexture(_tempHeightMap.width, _tempHeightMap.height, 0,
-            RenderTextureFormat.RHalf, RenderTextureReadWrite.Linear) {wrapMode = TextureWrapMode.Repeat};
+            RenderTextureFormat.RHalf, RenderTextureReadWrite.Linear)
+        { wrapMode = TextureWrapMode.Repeat };
         Graphics.Blit(_blurMap0, MainGuiScript.HdHeightMap, _blitMaterial, 2);
 
         CleanupTexture(_tempHeightMap);
@@ -978,7 +989,7 @@ public class HeightFromDiffuseGui : MonoBehaviour
         _blitMaterialNormal.SetVector(ImageSize, new Vector4(_imageSizeX, _imageSizeY, 0, 0));
         _blitMaterialNormal.SetFloat(Spread, _heightFromDiffuseSettings.Spread);
         _blitMaterialNormal.SetFloat(SpreadBoost, _heightFromDiffuseSettings.SpreadBoost);
-        _blitMaterialNormal.SetFloat(Samples, (int) _heightFromDiffuseSettings.Spread);
+        _blitMaterialNormal.SetFloat(Samples, (int)_heightFromDiffuseSettings.Spread);
         _blitMaterialNormal.SetTexture(MainTex, MainGuiScript.NormalMap);
         _blitMaterialNormal.SetTexture(BlendTex, _blurMap1);
 
@@ -1014,8 +1025,7 @@ public class HeightFromDiffuseGui : MonoBehaviour
         _blitMaterialSample.SetInt(IsolateSample1, _heightFromDiffuseSettings.IsolateSample1 ? 1 : 0);
         _blitMaterialSample.SetInt(UseSample1, _heightFromDiffuseSettings.UseSample1 ? 1 : 0);
         _blitMaterialSample.SetColor(SampleColor1, _heightFromDiffuseSettings.SampleColor1);
-        _blitMaterialSample.SetVector(SampleUv1,
-            new Vector4(_heightFromDiffuseSettings.SampleUv1.x, _heightFromDiffuseSettings.SampleUv1.y, 0, 0));
+        _blitMaterialSample.SetVector(SampleUv1,new Vector4(_heightFromDiffuseSettings.SampleUv1.x, _heightFromDiffuseSettings.SampleUv1.y, 0, 0));
         _blitMaterialSample.SetFloat(HueWeight1, _heightFromDiffuseSettings.HueWeight1);
         _blitMaterialSample.SetFloat(SatWeight1, _heightFromDiffuseSettings.SatWeight1);
         _blitMaterialSample.SetFloat(LumWeight1, _heightFromDiffuseSettings.LumWeight1);
@@ -1026,8 +1036,7 @@ public class HeightFromDiffuseGui : MonoBehaviour
         _blitMaterialSample.SetInt(IsolateSample2, _heightFromDiffuseSettings.IsolateSample2 ? 1 : 0);
         _blitMaterialSample.SetInt(UseSample2, _heightFromDiffuseSettings.UseSample2 ? 1 : 0);
         _blitMaterialSample.SetColor(SampleColor2, _heightFromDiffuseSettings.SampleColor2);
-        _blitMaterialSample.SetVector(SampleUv2,
-            new Vector4(_heightFromDiffuseSettings.SampleUv2.x, _heightFromDiffuseSettings.SampleUv2.y, 0, 0));
+        _blitMaterialSample.SetVector(SampleUv2,new Vector4(_heightFromDiffuseSettings.SampleUv2.x, _heightFromDiffuseSettings.SampleUv2.y, 0, 0));
         _blitMaterialSample.SetFloat(HueWeight2, _heightFromDiffuseSettings.HueWeight2);
         _blitMaterialSample.SetFloat(SatWeight2, _heightFromDiffuseSettings.SatWeight2);
         _blitMaterialSample.SetFloat(LumWeight2, _heightFromDiffuseSettings.LumWeight2);

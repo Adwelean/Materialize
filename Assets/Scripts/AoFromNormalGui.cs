@@ -1,6 +1,9 @@
 ﻿#region
 
 using System.Collections;
+
+using Cysharp.Threading.Tasks;
+
 using UnityEngine;
 
 #endregion
@@ -255,6 +258,7 @@ public class AoFromNormalGui : MonoBehaviour
         Busy = false;
     }
 
+
     public IEnumerator ProcessNormalDepth()
     {
         Busy = true;
@@ -294,6 +298,7 @@ public class AoFromNormalGui : MonoBehaviour
             yield return new WaitForSeconds(0.01f);
         }
 
+        
         yield return new WaitForSeconds(0.01f);
 
         Busy = false;
