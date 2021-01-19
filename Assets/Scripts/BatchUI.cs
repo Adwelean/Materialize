@@ -51,6 +51,7 @@ public class BatchUI : MonoBehaviour
         await new MaterializeManager(outputProcessResultPath).Generate(filePaths.ToUniTaskAsyncEnumerable());
     }
 
+    [Obsolete("TODO: refactoring")]
     public async UniTask StartBatch(string outputProcessResultPath, string path)
     {
         /*var fileNames = Directory

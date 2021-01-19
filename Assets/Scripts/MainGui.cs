@@ -308,6 +308,16 @@ public class MainGui : MonoBehaviour
                 await Batchui.StartBatch(outputProcessResultPath, filePaths);
             }
 
+            if (!string.IsNullOrWhiteSpace(baseDirectory))
+            {
+                // TODO
+            }
+
+            if (!string.IsNullOrWhiteSpace(baseDirectoryWithRecurse))
+            {
+                // TODO
+            }
+
             File.AppendAllText(succesLogFilePath, $"[{DateTimeOffset.Now:G}] success");
         }
         catch (Exception ex)
