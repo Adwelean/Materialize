@@ -2,22 +2,20 @@
 using System.IO;
 
 using Assets.Scripts.NextGen.GeneratorDescriptor;
+using Assets.Scripts.NextGen.TextureProcessor;
 
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
 
 using UnityEngine;
 
-using HeightMap = Assets.Scripts.NextGen.GeneratorDescriptor.HeightMapDescriptor;
-using NormalMap = Assets.Scripts.NextGen.GeneratorDescriptor.NormalMapDescriptor;
-using MetalicMap = Assets.Scripts.NextGen.GeneratorDescriptor.MetalicMapDescriptor;
-using SmoothnessMap = Assets.Scripts.NextGen.GeneratorDescriptor.SmoothnessMapDescriptor;
-using EdgeMap = Assets.Scripts.NextGen.GeneratorDescriptor.EdgeMapDescriptor;
 using AOMap = Assets.Scripts.NextGen.GeneratorDescriptor.AOMapDescriptor;
+using EdgeMap = Assets.Scripts.NextGen.GeneratorDescriptor.EdgeMapDescriptor;
+using HeightMap = Assets.Scripts.NextGen.GeneratorDescriptor.HeightMapDescriptor;
+using MetalicMap = Assets.Scripts.NextGen.GeneratorDescriptor.MetalicMapDescriptor;
+using NormalMap = Assets.Scripts.NextGen.GeneratorDescriptor.NormalMapDescriptor;
+using SmoothnessMap = Assets.Scripts.NextGen.GeneratorDescriptor.SmoothnessMapDescriptor;
 using UnityMaskMap = Assets.Scripts.NextGen.GeneratorDescriptor.UnityMaskMapDescriptor;
-
-using Assets.Scripts.NextGen.TextureProcessor;
-using Assets.Scripts.NextGen.Extensions;
 
 namespace Assets.Scripts.NextGen
 {
@@ -43,6 +41,9 @@ namespace Assets.Scripts.NextGen
                 }
                 catch (Exception ex)
                 {
+                    File.AppendAllText(ErrorLogFilePath, $"[{DateTimeOffset.Now:G}] Failed to process {textureFilePath} file.\n");
+                    File.AppendAllText(ErrorLogFilePath, ex.Message);
+
                     ret = false;
                 }
             });
@@ -59,7 +60,7 @@ namespace Assets.Scripts.NextGen
 
             if (!diffuseTextureFileInfo.Exists)
             {
-                File.AppendAllText(ErrorLogFilePath, $"[{DateTimeOffset.Now:G}] File {textureFilePath} does not exist.");
+                File.AppendAllText(ErrorLogFilePath, $"[{DateTimeOffset.Now:G}] File {textureFilePath} does not exist.\n");
 
                 return false;
             }
@@ -71,8 +72,8 @@ namespace Assets.Scripts.NextGen
             if (!diffuseMap.LoadImage(diffuseTextureFileRawData))
             {
                 Debug.LogError($"Cannot load texture data. ({diffuseTextureFileInfo.FullName})");
-                File.AppendAllText(ErrorLogFilePath, $"[{DateTimeOffset.Now:G}] Cannot load texture data ({diffuseTextureFileInfo.FullName}).");
-                
+                File.AppendAllText(ErrorLogFilePath, $"[{DateTimeOffset.Now:G}] Cannot load texture data ({diffuseTextureFileInfo.FullName}).\n");
+
                 return false;
             }
 

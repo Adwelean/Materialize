@@ -1,18 +1,16 @@
-﻿#region
-
-using System;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+
+using Cysharp.Threading.Tasks;
+
 using SFB;
+
 using UnityEngine;
 using UnityEngine.UI;
 
-using Cysharp.Threading.Tasks;
-using System.Collections;
-using System.IO;
-
-
-#endregion
 
 public class MainGui : MonoBehaviour
 {
@@ -178,9 +176,6 @@ public class MainGui : MonoBehaviour
     private bool ScaleTextureLocked;
     public Toggle[] FileFormatToggles;
 
-    public Text DebugLog;
-    string cmdInfos = "no args";
-
     #endregion
 
     private void Awake()
@@ -253,17 +248,13 @@ public class MainGui : MonoBehaviour
 
         HideGuiLocker.LockEmpty += LoadHideState;
 
-        var path = GetArg("-batchPath");
-        cmdInfos = "P:"+path+"\n"+ string.Join("\n", System.Environment.GetCommandLineArgs());
-
-        //await StartBatchAsync();
         StartCoroutine(LateStart(5));
     }
 
     IEnumerator LateStart(float waitTime)
     {
         yield return new WaitForSeconds(waitTime);
-        //Your Function You Want to Call
+
         StartBatch();
     }
 
@@ -287,7 +278,7 @@ public class MainGui : MonoBehaviour
 
         if (new string[] { filePathsToProcess, baseDirectory, baseDirectoryWithRecurse }.Where(x => !string.IsNullOrWhiteSpace(x)).Count() > 1)
         {
-            File.AppendAllText(errorLogFilePath, $"[{DateTimeOffset.Now:G}] Please use only one of the following options: -filePathsToProcessCommaSeparated, -basePath, -basePathWithRecuse");
+            File.AppendAllText(errorLogFilePath, $"[{DateTimeOffset.Now:G}] Please use only one of the following options: -filePathsToProcessCommaSeparated, -basePath, -basePathWithRecuse.\n");
 
             Application.Quit(1);
         }
@@ -300,7 +291,7 @@ public class MainGui : MonoBehaviour
 
                 if (filePaths.Length <= 0)
                 {
-                    File.AppendAllText(errorLogFilePath, $"[{DateTimeOffset.Now:G}] No files has been specified");
+                    File.AppendAllText(errorLogFilePath, $"[{DateTimeOffset.Now:G}] No files has been specified.\n");
 
                     Application.Quit(1);
                 }
@@ -318,22 +309,16 @@ public class MainGui : MonoBehaviour
                 // TODO
             }
 
-            File.AppendAllText(succesLogFilePath, $"[{DateTimeOffset.Now:G}] success");
+            File.AppendAllText(succesLogFilePath, $"[{DateTimeOffset.Now:G}] success.\n");
         }
         catch (Exception ex)
         {
-            File.AppendAllText(errorLogFilePath, $"[{DateTimeOffset.Now:G}] {ex.Message}");
+            File.AppendAllText(errorLogFilePath, $"[{DateTimeOffset.Now:G}] {ex.Message}.\n");
         }
         finally
         {
             Application.Quit();
         }
-    }
-
-    /*async UniTask*/ void OnGUI()
-    {
-        GUILayout.Label(cmdInfos);
-        //await StartBatchAsync();
     }
 
     private void LateUpdate()
@@ -987,7 +972,7 @@ public class MainGui : MonoBehaviour
         {
             for (int y = 0; y < TempMap.height; y++)
             {
-                theColour.r = TextureRed == null ? TextureRed.GetPixel(x, y).grayscale : new Texture2D(TempMap.width,TempMap.height).GetPixel(x,y).grayscale;
+                theColour.r = TextureRed == null ? TextureRed.GetPixel(x, y).grayscale : new Texture2D(TempMap.width, TempMap.height).GetPixel(x, y).grayscale;
                 theColour.g = TextureGreen == null ? TextureGreen.GetPixel(x, y).grayscale : new Texture2D(TempMap.width, TempMap.height).GetPixel(x, y).grayscale;
                 theColour.b = TextureBlue == null ? TextureBlue.GetPixel(x, y).grayscale : new Texture2D(TempMap.width, TempMap.height).GetPixel(x, y).grayscale;
                 if (PropAlpha == PropChannelMap.None)
@@ -1192,7 +1177,7 @@ public class MainGui : MonoBehaviour
             default:
                 break;
         }
-        
+
     }
     public Texture2D returnTexture(PropChannelMap map)
     {
@@ -1223,7 +1208,7 @@ public class MainGui : MonoBehaviour
         {
             ProcessPropertyMapRevised();
         }
-       // SaveTextureFile(MapType.Property);
+        // SaveTextureFile(MapType.Property);
     }
     public void QuickSavePropertyMap()
     {
@@ -1313,8 +1298,8 @@ public class MainGui : MonoBehaviour
                 type = MapType.Ao;
                 break;
         }
-           
-        
+
+
         return type;
     }
     public void QuickSave(int mapType)
@@ -1387,18 +1372,19 @@ public class MainGui : MonoBehaviour
         Texture2D map = SmoothnessMap;
         var whitePixels = 0;
         var blackPixels = 0;
-        for (int i = 0; i < map.width; i++) { 
+        for (int i = 0; i < map.width; i++)
+        {
 
             for (int j = 0; j < map.height; j++)
             {
                 Color pixel = map.GetPixel(i, j);
 
                 // if it's a white color then just debug...
-                pixel.r = 1 - pixel.r ;
-                pixel.g = 1 - pixel.g ;
-                pixel.b = 1 - pixel.b ;
+                pixel.r = 1 - pixel.r;
+                pixel.g = 1 - pixel.g;
+                pixel.b = 1 - pixel.b;
                 map.SetPixel(i, j, pixel);
-                
+
             }
         }
         map.Apply();
@@ -1408,7 +1394,7 @@ public class MainGui : MonoBehaviour
 
     }
 
-       
+
     #region Gui Hide Variables
 
     [HideInInspector] public CountLocker HideGuiLocker = new CountLocker();
@@ -1443,5 +1429,5 @@ public class MainGui : MonoBehaviour
     //public void SetPropertyMap()
 
     #endregion
-  
+
 }
